@@ -405,8 +405,8 @@ function findAllOccurences(arr, item) {
  *    [1, 2, 3, 4, 5]                   => '1,2,3,4,5'
  *    ['rock', 'paper', 'scissors']     => 'rock,paper,scissors'
  */
-function toStringList(/* arr */) {
-  throw new Error('Not implemented');
+function toStringList(arr) {
+  return arr.join();
 }
 
 
@@ -436,8 +436,15 @@ function toStringList(/* arr */) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  const arr1 = arr.sort((a, b) => {
+    if (a.country > b.country) return 1;
+    return -1;
+  });
+  return arr1.sort((a, b) => {
+    if (a.country === b.country && a.city < b.city) return 1;
+    return -1;
+  }).reverse();
 }
 
 /**
@@ -458,8 +465,12 @@ function sortCitiesArray(/* arr */) {
  *           [0,0,0,1,0],
  *           [0,0,0,0,1]]
  */
-function getIdentityMatrix(/* n */) {
-  throw new Error('Not implemented');
+function getIdentityMatrix(n) {
+  const arr = (new Array(n)).fill(new Array(n).fill(0));
+  return arr.map((val, ind) => val.map((num, index) => {
+    if (ind === index) return 1;
+    return 0;
+  }));
 }
 
 /**
@@ -475,8 +486,9 @@ function getIdentityMatrix(/* n */) {
  *     0, 100 => [ 0, 1, 2, ..., 100 ]
  *     3, 3   => [ 3 ]
  */
-function getIntervalArray(/* start, end */) {
-  throw new Error('Not implemented');
+function getIntervalArray(start, end) {
+  const arr1 = new Array(end - start + 1).fill(0);
+  return arr1.map((val, ind) => start + ind);
 }
 
 /**
@@ -490,8 +502,13 @@ function getIntervalArray(/* start, end */) {
  *   [ 'a', 'a', 'a', 'a' ]  => [ 'a' ]
  *   [ 1, 1, 2, 2, 3, 3, 4, 4] => [ 1, 2, 3, 4]
  */
-function distinct(/* arr */) {
-  throw new Error('Not implemented');
+function distinct(arr) {
+  const arr1 = [];
+  arr.map((val) => {
+    if (!arr1.includes(val)) arr1.push(val);
+    return 1;
+  });
+  return arr1;
 }
 
 /**
@@ -524,8 +541,16 @@ function distinct(/* arr */) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  const map = new Map();
+
+  array.map((val, ind) => {
+    const key = keySelector(array[ind]);
+    if (map.has(key)) map.get(key).push(valueSelector(array[ind]));
+    else map.set(key, [valueSelector(array[ind])]);
+    return 1;
+  });
+  return map;
 }
 
 
@@ -542,8 +567,8 @@ function group(/* array, keySelector, valueSelector */) {
  *   [[1, 2], [3, 4], [5, 6]], (x) => x     =>   [ 1, 2, 3, 4, 5, 6 ]
  *   ['one','two','three'], x=>x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
-function selectMany(/* arr, childrenSelector */) {
-  throw new Error('Not implemented');
+function selectMany(arr, childrenSelector) {
+  return arr.map((val) => childrenSelector(val)).flat();
 }
 
 
@@ -559,8 +584,30 @@ function selectMany(/* arr, childrenSelector */) {
  *   ['one','two','three'], [2]       => 'three'  (arr[2])
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
-function getElementByIndexes(/* arr, indexes */) {
-  throw new Error('Not implemented');
+function getElementByIndexes(arr, indexes) {
+  const len = indexes.length;
+  let res = 0;
+  arr.map((val, index) => {
+    if (index === indexes[0]) {
+      if (len === 1) res = val;
+      else {
+        val.map((val1, index1) => {
+          if (index1 === indexes[1]) {
+            if (len === 2) res = val1;
+            else {
+              val1.map((val2, index2) => {
+                if (index2 === indexes[2]) res = val2;
+                return 1;
+              });
+            }
+          }
+          return 1;
+        });
+      }
+    }
+    return 1;
+  });
+  return res;
 }
 
 
@@ -582,8 +629,21 @@ function getElementByIndexes(/* arr, indexes */) {
  *   [ 1, 2, 3, 4, 5, 6, 7, 8 ]   =>  [ 5, 6, 7, 8, 1, 2, 3, 4 ]
  *
  */
-function swapHeadAndTail(/* arr */) {
-  throw new Error('Not implemented');
+function swapHeadAndTail(arr) {
+  const res = [];
+  const odd = Boolean(arr.length % 2);
+  const middle = Math.floor(arr.length / 2);
+  arr.map((val, ind) => {
+    if (ind < middle) {
+      res.push(val);
+    }
+    if (odd) {
+      if (ind === middle) res.unshift(val);
+      if (ind > middle) res.unshift(arr.splice(ind));
+    } else if (ind >= middle) res.unshift(arr.splice(ind));
+    return 1;
+  });
+  return res.flat();
 }
 
 
