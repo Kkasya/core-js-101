@@ -214,8 +214,12 @@ function findFirstSingleChar(str) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  const start = (isStartIncluded) ? '[' : '(';
+  const end = (isEndIncluded) ? ']' : ')';
+  const a1 = (a > b) ? b : a;
+  const b1 = (a > b) ? a : b;
+  return `${start}${a1}, ${b1}${end}`;
 }
 
 
@@ -231,8 +235,8 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  return str.split('').reverse().join('');
 }
 
 
@@ -248,8 +252,8 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  return Number(String(num).split('').reverse().join(''));
 }
 
 
@@ -273,8 +277,16 @@ function reverseInteger(/* num */) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const arr = String(ccn).split('').reverse();
+  let res = 0;
+  for (let i = 0; i < arr.length; i += 1) {
+    const j = Number(arr[i]);
+    if ((i + 1) % 2) res += j;
+    else if ((j * 2) < 9) res += j * 2;
+    else res += ((j * 2) % 10) + Math.floor((j * 2) / 10);
+  }
+  return !(res % 10);
 }
 
 /**
@@ -291,8 +303,16 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  let arr = String(num).split('');
+  let res;
+  while (arr.length !== 1) {
+    res = 0;
+    // eslint-disable-next-line no-loop-func, no-return-assign
+    arr.forEach((n) => res += Number(n));
+    arr = String(res).split('');
+  }
+  return res;
 }
 
 
