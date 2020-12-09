@@ -100,7 +100,6 @@ function getFirstChar(value) {
  *   '\tHello, World! ' => 'Hello, World!'
  */
 function removeLeadingAndTrailingWhitespaces(value) {
-  // throw new Error('Not implemented');
   return value.trim().match(/[\w\s\W]/g).join('');
 }
 
@@ -211,8 +210,30 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  let res = '';
+  for (let j = 0; j < height; j += 1) {
+    if (j === 0) {
+      for (let i = 0; i < width; i += 1) {
+        if (i === 0) res += '┌';
+        else if (i === width - 1) res += '┐\n';
+        else res += '─';
+      }
+    } else if (j === height - 1) {
+      for (let i = 0; i < width; i += 1) {
+        if (i === 0) res += '└';
+        else if (i === width - 1) res += '┘\n';
+        else res += '─';
+      }
+    } else {
+      for (let i = 0; i < width; i += 1) {
+        if (i === 0) res += '│';
+        else if (i === width - 1) res += '│\n';
+        else res += ' ';
+      }
+    }
+  }
+  return res;
 }
 
 
