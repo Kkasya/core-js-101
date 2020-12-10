@@ -337,8 +337,19 @@ function getDigitalRoot(num) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const openedArr = ['[', '{', '(', '<'];
+  const closedArr = [']', '}', ')', '>'];
+  const steck = [];
+  let res = true;
+  for (let i = 0; i < str.length; i += 1) {
+    if (openedArr.indexOf(str[i]) === -1) {
+      if (openedArr.indexOf(steck[steck.length - 1]) !== closedArr.indexOf(str[i])) res = false;
+      else steck.pop();
+    } else steck.push(str[i]);
+  }
+  if (steck.length !== 0) res = false;
+  return res;
 }
 
 
@@ -362,15 +373,15 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 
 /**
- * Returns the commom directory path for specified array of full filenames.
+ * Returns the common directory path for specified array of full filenames.
  *
- * @param {array} pathes
+ * @param {array} paths
  * @return {string}
  *
  * @example:
@@ -379,8 +390,32 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(paths) {
+  const res = ['/'];
+  // eslint-disable-next-line consistent-return
+  paths.forEach((str) => {
+    if (str[0] !== res[0]) {
+      res.pop();
+      res.push('');
+    }
+  });
+  let path1 = paths[1].slice(1);
+  let end = true;
+  while (end && res[0]) {
+    const index = path1.indexOf('/');
+
+    if (index === -1) end = false;
+    const substr = path1.slice(0, index + 1);
+    path1 = path1.slice(index + 1);
+    let number = 1;
+    paths.forEach((str) => {
+      if (!str.includes(substr)) number = 0;
+    });
+    if (number) res.push(substr);
+
+    else end = false;
+  }
+  return res.join('');
 }
 
 
@@ -402,8 +437,21 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const column = m2.length;
+  const row = m1.length;
+  const col = m2[0].length;
+  const multiplyArr = [];
+  for (let i = 0; i < row; i += 1) multiplyArr[i] = [];
+
+  for (let i = 0; i < col; i += 1) {
+    for (let j = 0; j < row; j += 1) {
+      let temp = 0;
+      for (let k = 0; k < column; k += 1) temp += m1[j][k] * m2[k][i];
+      multiplyArr[j][i] = temp;
+    }
+  }
+  return multiplyArr;
 }
 
 
@@ -437,8 +485,21 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  const row1 = position[0];
+  const row2 = position[1];
+  const row3 = position[2];
+  if (row1[0]) {
+    if ((row1[0] === row1[1] && row1[0] === row1[2])
+    || (row1[0] === row2[0] && row1[0] === row3[0])
+    || (row1[0] === row2[1] && row1[0] === row3[2])) return row1[0];
+  }
+  if (row1[1] && row1[1] === row2[1] && row1[1] === row3[1]) return row1[1];
+  if ((row1[2] && (row1[2] === row2[2] && row1[2] === row3[2]))
+  || (row1[2] === row2[1] && row1[2] === row3[0])) return row1[2];
+  if (row2[0] && row2[0] === row2[1] && row2[0] === row2[2]) return row2[0];
+  if (row3[0] && row3[0] === row3[1] && row3[0] === row3[2]) return row3[0];
+  return undefined;
 }
 
 
