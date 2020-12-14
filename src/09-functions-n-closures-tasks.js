@@ -23,8 +23,11 @@
  *   getComposition(Math.sin, Math.asin)(x) => Math.sin(Math.asin(x))
  *
  */
-function getComposition(/* f, g */) {
-  throw new Error('Not implemented');
+function getComposition(f, g) {
+  return function fun() {
+    // eslint-disable-next-line prefer-rest-params
+    return f(g(...arguments));
+  };
 }
 
 
@@ -44,8 +47,11 @@ function getComposition(/* f, g */) {
  *   power05(16) => 4
  *
  */
-function getPowerFunction(/* exponent */) {
-  throw new Error('Not implemented');
+function getPowerFunction(exponent) {
+  return function f() {
+    // eslint-disable-next-line prefer-rest-params
+    return arguments[0] ** exponent;
+  };
 }
 
 
@@ -63,7 +69,19 @@ function getPowerFunction(/* exponent */) {
  *   getPolynom()      => null
  */
 function getPolynom() {
-  throw new Error('Not implemented');
+  // eslint-disable-next-line prefer-rest-params
+  const arr = arguments;
+  const len = arr.length;
+
+  if (len === 0) return null;
+
+  return (x) => {
+    let y = 0;
+    for (let i = 0; i < len; i += 1) {
+      y += arr[i] * (x ** (len - 1 - i));
+    }
+    return y;
+  };
 }
 
 
@@ -81,8 +99,14 @@ function getPolynom() {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  let cache;
+  return () => {
+    if (!cache) {
+      cache = func();
+    }
+    return cache;
+  };
 }
 
 
@@ -101,10 +125,21 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  let count = 0;
+  const fn = () => {
+    if (count !== attempts) {
+      try {
+        func();
+      } catch (e) {
+        count += 1;
+        fn();
+      }
+    }
+    return func();
+  };
+  return fn;
 }
-
 
 /**
  * Returns the logging wrapper for the specified method,
@@ -129,8 +164,15 @@ function retry(/* func, attempts */) {
  * cos(3.141592653589793) ends
  *
  */
-function logger(/* func, logFunc */) {
-  throw new Error('Not implemented');
+function logger(func, logFunc) {
+  function fn(...args) {
+    const str = `${func.name}(${JSON.stringify(args).slice(1, -1)})`;
+    logFunc(`${str} starts`);
+    const res = func(...args);
+    logFunc(`${str} ends`);
+    return res;
+  }
+  return fn;
 }
 
 
